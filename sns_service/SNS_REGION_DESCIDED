@@ -1,0 +1,14 @@
+{
+ "Resources": {
+  "SNS_Topic": {
+   "Type": "AWS::SNS::Topic"
+  }
+ },
+ "Outputs": {
+  "SNS_TopicArn": {
+   "Value": {
+     "Ref": "SNS_Topic"
+   }
+  }
+ }
+}

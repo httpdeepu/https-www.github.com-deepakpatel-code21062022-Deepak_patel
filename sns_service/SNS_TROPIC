@@ -1,0 +1,55 @@
+{
+  "Parameters": {
+    "CrossAccountNumber": {
+      "AllowedPattern": "[0-9]+",
+      "Description": "The 12 digit AWS account number to grant access to.",
+      "MaxLength": "12",
+      "MinLength": "12",
+      "Type": "String",
+      "Default": 123456789101
+    }
+  },
+  "Resources": {
+    "SnsTopic": {
+      "Type": "AWS::SNS::Topic"
+    },
+    "SnsTopicPolicy": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "DependsOn": "SnsTopic",
+      "Properties": {
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "Sns_TopicPolicy",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Sub": "arn:aws:iam::${CrossAccountNumber}:root"
+                }
+              },
+              "Action": [
+                "sns:Subscribe"
+              ],
+              "Resource": {
+                "Ref": "SnsTopic"
+              }
+            }
+          ]
+        },
+        "Topics": [
+          {
+            "Ref": "SnsTopic"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "SnsTopicArn": {
+      "Value": {
+        "Ref": "SnsTopic"
+      }
+    }
+  }
+}

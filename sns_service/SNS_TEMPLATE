@@ -1,0 +1,35 @@
+{
+ "Parameters": {
+  "SNS_TopicARN": {
+   "Type": "String",
+   "Default": "awsSNS_TopicArnExample"
+  },
+  "TopicRegion": {
+   "Type": "String",
+   "Default": "ap-south-1"
+  }
+ },
+ "Resources": {
+  "Queue": {
+   "Type": "AWS::SQS::Queue"
+  },
+  "SnsSubscription": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Protocol": "sqs",
+    "Endpoint": {
+     "Fn::GetAtt": [
+      "Queue",
+      "Arn"
+     ]
+    },
+    "Region": {
+     "Ref": "TopicRegion"
+    },
+    "TopicArn": {
+     "Ref": "SNS_TopicARN"
+    }
+   }
+  }
+ }
+}
